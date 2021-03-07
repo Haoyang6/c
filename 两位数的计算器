@@ -1,0 +1,54 @@
+#include<stdio.h>
+
+int add(int,int);
+int sub(int,int);
+int chen(int,int);
+int chu(int,int);
+int main(void)
+{
+	int a,b,result;
+	char input;
+	while(1)
+	{
+		printf("please select your action: \n");
+		scanf("%d %c %d",&a,&input,&b);
+		switch(input)
+		{
+		case '+':
+		result = add( a,b);
+		break;
+		case '-':
+		result = sub(a, b);
+		break;
+		case '*':
+		result=chen(a,b);
+		break;
+		case '/':
+		result=chu(a,b);
+		break;
+		default:
+		break;
+		}
+	printf("result = %d\n",result);
+	}
+return 0;
+}
+int add(int x,int y)
+{
+	return x+y;
+}
+
+int sub(int x,int y)
+{
+	return x-y;
+}
+int chen(int x,int y)
+{
+	return x*y;
+}
+int chu(int x,int y)
+{
+	return x/y;
+}
+
+
