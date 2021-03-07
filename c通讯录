@@ -1,0 +1,269 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+//���������ṹ��
+struct user{
+    char name[100];
+    char mobile[15];
+    char pwd[30];
+    int num;
+}yonghu[100];
+
+struct note{
+    char name[100];
+    char mobile[15];
+    char email[100];
+    int num;
+    int is_delete;
+}noteInfo[100];
+
+int count=0;
+int mcount=0;
+int lg=-1;
+//��������
+int rgist();
+int login();
+void mobileAdd();
+void mobileDelete();
+void mobileUpdate();
+void mobileQuery();
+void mobileStar();
+void mobileShouCang();
+void mobileBlack();
+int checkYongHuMobile();
+void inputPwdChange();
+
+int main(){
+    int num;
+	int p_count=0;
+	char input;
+	int j;
+	int i;
+	for(num=0;num<=100;num++)
+	{
+		printf("\n\n\t\t\t��ӭ����ͨѶ¼����ϵͳ\n\n");
+		printf("\t\t\tϵͳ�����У����Ժ�");
+		for(j=0;j<p_count;j++)
+		{
+			printf(".");
+		}
+		p_count++;
+		if(p_count==6)
+		{
+			p_count=0;
+		}
+		for(i=0;i<8000000;i++){};
+		printf("\t\t\t%d%%",num);
+		system("cls");
+	}
+    while(1){
+        printf("[A]ע��\t\t[B]��¼\n");
+        fflush(stdin);
+        scanf("%c",&input);
+        if(input=='A'||input=='a'){
+            int rs=rgist();
+            if(rs){
+                printf("\n�û�ע��ɹ����û�����%s���绰��%s,�û���ţ�%d",yonghu[count-1].name,yonghu[count-1].mobile,yonghu[count-1].num);
+            }else{
+                printf("\n�û�ע��ʧ�ܣ���\n");
+            }
+        }else if(input=='B'||input=='b'){
+            int ret=login();
+            system("cls");
+            if(ret){
+                while(1){
+                    printf("[A]���ӵ绰\t\t[B]�鿴�绰\t\t[C]ɾ���绰\n");
+                    fflush(stdin);
+                    scanf("%c",&input);
+                    if(input=='A'||input=='a'){
+                        mobileAdd();
+                    }else if(input=='B'||input=='b'){
+                        mobileQuery();
+                    }else if(input=='C'||input=='c'){
+                        mobileDelete();
+                    }else{
+                        printf("\n�������󣡣�");
+                    }
+                    printf("\n���������������������ģ���");
+                    getch();
+                    system("cls");
+                }
+            }
+        }else{
+            printf("\n�������󣡣�");
+        }
+        printf("\n������������˳�����");
+        getch();
+        system("cls");
+    }
+}
+
+int rgist(){
+    char confirm_pwd[30];
+    printf("\n������������");
+    fflush(stdin);
+    scanf("%s",yonghu[count].name);
+    while(1){
+        printf("\n���������룺");
+        fflush(stdin);
+        //scanf("%s",yonghu[count].pwd);
+        inputPwdChange(yonghu[count].pwd);
+        printf("%s",yonghu[count].pwd);
+        printf("\n������ȷ�����룺");
+        fflush(stdin);
+        //scanf("%s",&confirm_pwd);
+        inputPwdChange(&confirm_pwd);
+        if(strcmp(yonghu[count].pwd,confirm_pwd)==0){
+            break;
+        }else{
+            printf("\nȷ�����������벻��ͬ������");
+        }
+    }
+
+    while(1){
+        printf("\n������绰��");
+        fflush(stdin);
+        scanf("%s",yonghu[count].mobile);
+        int rs=checkYongHuMobile(yonghu[count].mobile);
+        if(rs==0){
+            break;
+        }else{
+            printf("\n���ֻ����Ѵ��ڣ����������룺");
+        }
+    }
+    yonghu[count].num=count;
+    count++;
+    return 1;
+}
+//���봦��
+void inputPwdChange(char pwd[30]){
+    int i=0;
+    while(1){
+        char word=getch();
+        if(word!='\r'){
+            if(word!='\b'){
+                pwd[i]=word;
+                printf("*");
+                i++;
+            }else{
+                if(strlen(pwd)>0){
+                    printf("\b \b");
+                    i--;
+                }
+            }
+        }else{
+            if(strlen(pwd)<6){
+                i=0;
+                printf("\n���볤�Ȳ���С����λ������");
+            }else{
+                break;
+            }
+        }
+    }
+    printf("\n");
+    pwd[i]='\0';
+}
+
+//��֤�û��绰����Ψһ��
+int checkYongHuMobile(char mobile[15])
+{
+    int flag=0;
+    int i;
+    for(i=0;i<count;i++){
+        if(strcmp(yonghu[i].mobile,mobile)==0){
+            flag=1;
+        }
+    }
+    return flag;
+}
+
+int login(){
+    char mobile[100];
+    char pwd[15];
+    int flag=0;
+    int i;
+    for(i=0;i<3;i++){\
+        printf("\n������绰:");
+        fflush(stdin);
+        scanf("%s",&mobile);
+        printf("\n���������룺");
+        fflush(stdin);
+        //scanf("%s",&pwd);
+        inputPwdChange(&pwd);
+        for(i=0;i<count;i++){
+            //printf("%s-%s,%s-%s",yonghu[i].mobile,mobile,yonghu[i].pwd,pwd);
+            if(strcmp(yonghu[i].mobile,mobile)==0 && strcmp(yonghu[i].pwd,pwd)==0){
+                flag=1;
+                lg=i;
+                break;
+            }
+        }
+        if(flag==0){
+            printf("\n�û�����������󣡣���");
+        }else{
+             break;
+        }
+        if(i==2){
+            printf("\n������Ĵ����������ޣ�����������������");
+        }
+    }
+
+    return flag;
+}
+
+void mobileAdd(){
+    printf("\n������������");
+    fflush(stdin);
+    scanf("%s",noteInfo[mcount].name);
+    printf("\n������绰��");
+    fflush(stdin);
+    scanf("%s",noteInfo[mcount].mobile);
+    printf("\n�������û����䣺");
+    fflush(stdin);
+    scanf("%s",noteInfo[mcount].email);
+    noteInfo[mcount].num=yonghu[lg].num;
+    mcount++;
+}
+/**
+*ɾ���绰��Ϣ
+*/
+void mobileDelete(){
+    char mobile[100];
+    int i;
+    printf("\n������Ҫɾ�����ֻ���:");
+    fflush(stdin);
+    scanf("%s",&mobile);
+    //����Ҫɾ�����ֻ���
+    int find=0;
+    for(i=0;i<mcount;i++){
+        if(noteInfo[i].num==yonghu[lg].num &&strcmp(mobile,noteInfo[i].mobile)==0){
+            find=1;
+        }
+        if(find==1){
+            noteInfo[i]=noteInfo[i+1];
+        }
+    }
+    if(find==1){
+        mcount--;
+        find=0;
+        printf("\n���ֻ���ɾ���ɹ����ֻ��ţ�%s ",mobile);
+    }else{
+        printf("\nɾ�����ֻ��Ų�����!!!");
+    }
+}
+void mobileUpdate();
+void mobileQuery(){
+    int i;
+    for(i=0;i<mcount;i++){
+        if(noteInfo[i].num==yonghu[lg].num){
+            printf("\n�û���Ϣ���û�����%s���绰��%s,���䣺%s",noteInfo[i].name,noteInfo[i].mobile,noteInfo[i].email);
+        }
+    }
+}
+void mobileStar();
+void mobileShouCang();
+void mobileBlack();
+
+
